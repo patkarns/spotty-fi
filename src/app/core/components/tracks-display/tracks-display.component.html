@@ -1,0 +1,10 @@
+<button mat-raised-button (click)="tracksFacade.getUserSavedTracks()">
+  Get Saved Tracks
+</button>
+<div>
+  <mat-grid-list cols="4" rowHeight="2:1">
+    <mat-grid-tile *ngFor="let track of tracksFacade.tracks$ | async">
+      <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" />
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
