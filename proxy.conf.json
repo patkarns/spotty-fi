@@ -1,0 +1,17 @@
+{
+    "/auth/**": {
+      "target": "http://localhost:5000",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/auth": {
+      "target": "http://localhost:5000",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/v1/**": {
+      "target": "https://api.spotify.com",
+      "secure": false,
+      "changeOrigin": true
+    }
+}
