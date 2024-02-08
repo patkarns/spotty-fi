@@ -30,7 +30,8 @@ const scopeArr = [
   'user-read-private',
   'user-library-read user-top-read',
   'user-read-playback-state',
-  'user-modify-playback-state'
+  'user-modify-playback-state',
+  'user-top-read'
 ]
 
 app.get('/auth/login', (req, res) => {

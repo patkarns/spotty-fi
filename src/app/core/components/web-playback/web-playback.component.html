@@ -1,0 +1,18 @@
+<div class="container">
+  <div id="spotify-player"></div>
+<div class="content">
+    <!-- <div *ngIf="isActive"> -->
+      <img src={{currentTrack.album.images[0].url}} className="now-playing__cover" alt="" />
+      <div>
+
+      <div *ngIf="currentTrack.name">{{currentTrack.name}} ({{currentTrack.artists[0].name}})</div>
+      <div class="playback-controls"><button mat-raised-button (click)="previousTrack()">
+        <span class="material-icons-round">skip_previous</span>
+      </button>
+      <button mat-raised-button (click)="togglePlay()">Pause</button>
+      <button mat-raised-button (click)="nextTrack()">
+          <span class="material-icons-round">skip_next</span>
+      </button></div>
+    </div>
+</div>
+</div>

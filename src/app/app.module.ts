@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './core/layout/header/header.component';
@@ -12,6 +13,7 @@ import { MainContentComponent } from './core/layout/main-content/main-content.co
 import { reducers, metaReducers } from './core/state';
 import { LoginEffects } from './core/state/login';
 import { TracksEffects } from './core/state/tracks';
+
 
 @NgModule({
   imports: [
@@ -21,6 +23,9 @@ import { TracksEffects } from './core/state/tracks';
     HttpClientModule,
     MainContentComponent,
     RouterOutlet,
+    StoreDevtoolsModule.instrument({
+      name: 'Spoty fi'
+    }),
     StoreModule.forRoot(reducers, {
       metaReducers,
     })

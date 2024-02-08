@@ -2,9 +2,23 @@
   Get Saved Tracks
 </button>
 <div>
-  <mat-grid-list cols="4" rowHeight="2:1">
-    <mat-grid-tile *ngFor="let track of tracksFacade.tracks$ | async">
-      <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" />
+  <mat-grid-list cols="2" rowHeight="2:1">
+    <mat-grid-tile
+      *ngFor="let track of tracksFacade.tracks$ | async"
+      (click)="playbackService.addToPlaybackQueue(track.uri)"
+    >
+      <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" matRipple
+      [matRippleCentered]="false"
+      [matRippleDisabled]="false"
+      [matRippleUnbounded]="false"
+  
+      >
     </mat-grid-tile>
   </mat-grid-list>
 </div>
+
+
+<!-- TODO: cursor pointer -->
+
+<!-- [matRippleRadius]="radius"
+[matRippleColor]="color" -->

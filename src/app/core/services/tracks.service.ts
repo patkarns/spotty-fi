@@ -52,7 +52,7 @@ export class TracksService {
     const token = this.authService.getToken();
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}` )
-    const getUserSavedTracksUrl = '/v1/me/tracks';
+    const getUserSavedTracksUrl = `/v1/me/tracks?limit=${50}&offset=${0}`;  // TODO: pagination
     
     return (
       this.http.get<UserSavedTracksApiResponse>(getUserSavedTracksUrl, { headers }).pipe(
