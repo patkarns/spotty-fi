@@ -1,26 +1,87 @@
-@import '../../../../variables.scss';
+@import "../../../../variables.scss";
 
+.track-display-controls,
+.track-browsing-options {
+  border-radius: 1em;
+  margin: 1em;
+  padding: 1em;
 
+//   .search-input {
+//     padding: 1rem;
+//     border: 0.2em solid $color-green-lighter;
+//     border-radius: 0.5em;
+//     width: 100%;
+//   }
 
-.track-display-controls,  .track-info-browser, .track-browsing-options {
-    border: .2em solid $green-lightest;
-    border-radius: 1em;
-    margin: 1em;
-    padding: 1em;
+//   .search-button-container {
+//     justify-content: end;
+//     justify-content: flex-start !important ;
+//     align-items: flex-start !important;
+//   }
 
-    .slider {
-        width: 85%;
-    }
+//   .search-button {
+//     margin: 1em;
+//   }
 
-    .track-info {
-        width: 90%;
-    }
+  .slider {
+    width: 85%;
+  }
+
+  .track-info {
+    width: 90%;
+  }
 }
 
 .track-container {
-    margin: 0 1em;
+  margin: 0 1em;
 
-    .track:hover {
-        cursor: pointer;
+  .track-tile:hover {
+    cursor: pointer;
+
+    .track-info-overlay {
+      opacity: 1;
     }
+
+    img {
+        opacity: 0.2;
+    }
+  }
+
+  .track-info-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: 0.5s ease;
+
+    .track-info-wrapper {
+      margin: 1em 0;
+
+      .text {
+        color: $color-grey-darkest;
+        padding: 0 1em;
+        font-size: 1.2em;
+        margin: 0;
+        text-align: left;
+      }
+
+      .main-text {
+        font-weight: 500;
+        margin-bottom: 0.5em;
+      }
+
+      .subtitle-text {
+        font-weight: 300;
+      }
+    }
+  }
+}
+
+:ng-deep .mat-grid-tile-content {
+  justify-content: flex-start !important ;
+  align-items: flex-start !important;
 }
