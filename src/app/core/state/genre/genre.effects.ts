@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { switchMap, map, catchError, tap } from 'rxjs/operators';
 import { flatten, map as _map, omitBy, isUndefined, filter, size } from 'lodash';
@@ -20,11 +19,7 @@ export class GenreEffects {
       ofType(GenreActions.getGenresByAlbumIds.type),
       switchMap((action) =>
         this.albumsService.searchAlbumsByIds(action.albumIds).pipe(
-          map((albums) => {
-            console.log('flattened', albums.map(album => album.genres), flatten(albums.map(album => album.genres)))
-            return GenreActions.getGenresByAlbumIdsSuccess({ availableGenres: flatten(albums.map(album => album.genres))});
-          }),
-          // map((albums) => GenreActions.getGenresByAlbumIdsSuccess({ availableGenres: flatten(albums.map(album => album.genres))})),
+          map((albums) => GenreActions.getGenresByAlbumIdsSuccess({ availableGenres: flatten(albums.map(album => album.genres))})),
           catchError((error) =>
             of(GenreActions.getGenresByAlbumIdsFailed({ error }))
           )
