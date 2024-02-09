@@ -6,7 +6,8 @@ export enum TracksActionType {
   GET_USER_SAVED_TRACKS = '[TRACKS] Get User Saved Tracks',
   GET_USER_SAVED_TRACKS_SUCCESS = '[TRACKS] Get User Saved Tracks Success',
   GET_USER_SAVED_TRACKS_FAILED = '[TRACKS] Get User Saved Tracks Failed',
-  UPDATE_SEARCH_OFFSET = '[TRACKS] Update Search Offset'
+  UPDATE_SEARCH_OFFSET = '[TRACKS] Update Search Offset',
+  SEARCH_TRACKS_BY_GENRE = '[TRACKS] Search Tracks By Genre'
 }
 
 export const getUserSavedTracks = createAction(
@@ -26,4 +27,9 @@ export const getUserSavedTracksFailed = createAction(
 export const updateSearchOffset = createAction(
   TracksActionType.UPDATE_SEARCH_OFFSET,
   props<{ searchOffset: number }>()
+);
+
+export const searchTracksByGenre = createAction(
+  TracksActionType.SEARCH_TRACKS_BY_GENRE,
+  props<{ genre: string }>()
 );

@@ -30,4 +30,5 @@ export class TracksFacade {
 
     getUserSavedTracks = () => this.store.dispatch(TracksActions.getUserSavedTracks());
     updateSearchOffset = (searchOffset: number) => this.store.dispatch(TracksActions.updateSearchOffset({ searchOffset }));
+    searchTracksByGenre = (genre: string) => this.store.dispatch(TracksActions.searchTracksByGenre({ genre }));
 }
