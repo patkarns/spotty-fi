@@ -26,6 +26,13 @@ export const tracksReducer = createReducer(
     count: 0,
     isLoading: false,
     loaded: false
+  })),
+  on(TracksActions.updateSearchOffset, (state, { searchOffset }) => ({
+    ...state,
+    tracks: [],
+    searchOffset,
+    isLoading: false,
+    loaded: false
   }))
 );
 

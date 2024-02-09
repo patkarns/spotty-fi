@@ -4,29 +4,24 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Track } from '../state/tracks';
+import { SpotifyObjectType, SpotifyObject, Track } from '../state/tracks';
 import { AuthService } from './auth.service';
 
-interface AlbumApiResponse {
-  uri: string,
-  name: string,
-  id: string,
+interface AlbumApiResponse extends SpotifyObjectApiResponse {
   images: {
     url: string;
   }[]
 }
 
-interface ArtistApiResponse {
+interface SpotifyObjectApiResponse {
   uri: string,
   name: string,
   id: string,
+  type: SpotifyObjectType
 }
 
-interface TrackApiResponse {
-  uri: string,
-  name: string,
-  id: string,
-  artists: ArtistApiResponse[],
+interface TrackApiResponse extends SpotifyObjectApiResponse {
+  artists: SpotifyObjectApiResponse[],
   album: AlbumApiResponse,
   popularity: number
 }
@@ -48,11 +43,11 @@ interface UserSavedTracksApiResponse {
 export class TracksService {
   constructor(private authService: AuthService, private http: HttpClient) {}
 
-  getUserSavedTracks(): Observable<{ tracks: Track[], count: number}> {
+  getUserSavedTracks(limit: number, offset: number): Observable<{ tracks: Track[], count: number}> {
     const token = this.authService.getToken();
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}` )
-    const getUserSavedTracksUrl = `/v1/me/tracks?limit=${50}&offset=${0}`;  // TODO: pagination
+    const getUserSavedTracksUrl = `/v1/me/tracks?limit=${limit}&offset=${offset}`;  // TODO: pagination
     
     return (
       this.http.get<UserSavedTracksApiResponse>(getUserSavedTracksUrl, { headers }).pipe(
@@ -64,7 +59,20 @@ export class TracksService {
             id: item.track.id,
             popularity: item.track.popularity,
             imageUrl: item.track.album.images.length ? item.track.album.images[0].url : '',
-            uri: item.track.uri
+            uri: item.track.uri,
+            addedAt: item.added_at,
+            type: item.track.type,
+            album: {
+              name: item.track.album.name,
+              id: item.track.album.id,
+              uri: item.track.album.uri
+            } as SpotifyObject,
+            artists: item.track.artists.map(artistResponse => ({
+              name: artistResponse.name,
+              id: artistResponse.id,
+              uri: artistResponse.uri,
+              type: artistResponse.type
+            } as SpotifyObject))
           } as Track));
   
         return { tracks, count };
