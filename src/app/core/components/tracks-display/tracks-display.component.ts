@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatRippleModule } from '@angular/material/core';
@@ -29,12 +30,14 @@ import { TracksFacade } from '../../facades/tracks.facade';
 import { PlaybackService } from '../../services/playback.service';
 import { Track } from '../../state/tracks';
 import { GenreFacade } from '../../facades/genre.facade';
+import { PlaybackFacade } from '../../facades/playback.facade';
 
 @Component({
   selector: 'app-tracks-display',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatChipsModule,
     MatGridListModule,
@@ -60,9 +63,9 @@ export class TracksDisplayComponent implements OnInit {
     of([]);
 
   constructor(
-    public playbackService: PlaybackService,
+    public playbackFacade: PlaybackFacade,
     public tracksFacade: TracksFacade,
-    private genreFacade: GenreFacade
+    private genreFacade: GenreFacade,
   ) {}
 
   public ngOnInit(): void {
@@ -72,10 +75,6 @@ export class TracksDisplayComponent implements OnInit {
     ]).pipe(
       switchMap(([artistsById, pageCount]) => {
         if (!keys(artistsById).length) {
-          // const res = defaultGenres.slice(0, pageCount).map(genre => ({
-          //   name: genre,
-          //   color: this.chipColors.greenLightest
-          // })) as { name: string; color: string }[];
           return of([]);
         }
         this.genreFacade.getGenresByArtistIds(

@@ -1,25 +1,34 @@
 .main-content-container {
     display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  height: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
 
-  .content {
-    flex-direction: column;
-    flex-basis: 100%;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
+    .content {
+        flex-direction: column;
+        flex-basis: 100%;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
 
-    &.main-content {
-        flex: 2 1 0;
+        &.main-content {
+            flex: 2 1 0;
+        }
+
+        &.side-content {
+            // flex: 1 1 0;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            align-items: center;
+            position: -webkit-sticky;
+            /* for Safari */
+            position: sticky;
+            top: 40vh;
+            align-self: flex-start;
+        }
     }
 
-    &.side-content {
-        flex: 1 1 0;
-    }
-  }
 
-  
 }
