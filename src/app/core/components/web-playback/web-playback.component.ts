@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 import { AuthService } from '../../services/auth.service';
+import { PlaybackService } from '../../services/playback.service';
 
 interface Track {
   name: string;
@@ -41,7 +42,7 @@ export class WebPlaybackComponent implements OnInit {
     artists: [{ name: "" }]
   };
 
-  constructor(private authService: AuthService, private cdr: ChangeDetectorRef) { 
+  constructor(private authService: AuthService, private cdr: ChangeDetectorRef, private playbackService: PlaybackService) { 
   }
 
   ngOnInit(): void {
@@ -89,6 +90,7 @@ export class WebPlaybackComponent implements OnInit {
 
   previousTrack() {
     this.player.previousTrack();
+    this.playbackService.getUserQueue();
   }
 
   togglePlay() {
@@ -97,5 +99,6 @@ export class WebPlaybackComponent implements OnInit {
 
   nextTrack() {
     this.player.nextTrack();
+    this.playbackService.getUserQueue();
   }
 }
