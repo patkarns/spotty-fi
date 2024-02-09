@@ -20,7 +20,7 @@ interface SpotifyObjectApiResponse {
   type: SpotifyObjectType
 }
 
-interface TrackApiResponse extends SpotifyObjectApiResponse {
+export interface TrackApiResponse extends SpotifyObjectApiResponse {
   artists: SpotifyObjectApiResponse[],
   album: AlbumApiResponse,
   popularity: number
