@@ -16,20 +16,6 @@
 </div>
 
 <div class="track-browsing-options">
-    <!-- <mat-grid-list cols="6" rowHeight="2:1">
-        <mat-grid-tile colspan="4">
-            <input class="search-input" matInput #searchBarInput (keyup)="onSearchBarUpdate(searchBarInput.value)"> <button class="search-button" mat-raised-button 
-                 (click)="searchTracksByGenres()">
-                Search
-            </button>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2">
-            <button mat-raised-button (click)="tracksFacade.getUserSavedTracks()">
-                Get Saved Tracks
-            </button>
-        </mat-grid-tile>
-    </mat-grid-list> -->
-
     <div>
         <mat-chip-listbox aria-label="Genres">
             <mat-chip-option (click)="handleGenreToggle(genreItem.name)"
@@ -43,7 +29,7 @@
 
 <mat-grid-list class="track-container" cols="5" rowHeight="2:1">
     <mat-grid-tile class="track-tile" (mouseenter)="trackInfo = track" (mouseleave)="trackInfo = null" matRipple colspan="1"
-        *ngFor="let track of (tracksFacade.tracks$ | async)" (click)="playbackService.addToPlaybackQueue(track.uri)">
+        *ngFor="let track of (tracksFacade.tracks$ | async)" (click)="playbackFacade.addToPlaybackQueue(track.uri)">
         <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" matRipple [matRippleCentered]="false"
             [matRippleDisabled]="false" [matRippleUnbounded]="false">
             <div *ngIf="trackInfo" class="track-info-overlay">

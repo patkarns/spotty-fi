@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { Dictionary } from 'lodash';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
