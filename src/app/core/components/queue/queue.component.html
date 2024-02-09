@@ -1,0 +1,15 @@
+<div class="queue-container">
+    <div class="queue">
+        <div
+        *ngFor="let track of (playbackFacade.queue$ | async); let i = index"
+            class="queue-item"
+            [ngStyle]="{'background-color': queueItemColor[i%2] }"
+        >
+        <p class="text main-text">{{track.name}}</p>
+        <p class="text subtitle-text">{{track.artists[0].name}}</p>
+        </div>
+        <!-- <mat-list>
+            <mat-list-item *ngFor="let track of (playbackFacade.queue$ | async)">{{track.name}}</mat-list-item>
+        </mat-list> -->
+    </div>
+</div>
