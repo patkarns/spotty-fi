@@ -13,21 +13,23 @@ import { MainContentComponent } from './core/layout/main-content/main-content.co
 import { reducers, metaReducers } from './core/state';
 import { LoginEffects } from './core/state/login';
 import { TracksEffects } from './core/state/tracks';
+import { GenreEffects } from './core/state/genre';
 
 
 @NgModule({
   imports: [
     BrowserModule,
-    EffectsModule.forRoot([LoginEffects, TracksEffects]),
+    EffectsModule.forRoot([GenreEffects, LoginEffects, TracksEffects]),
     HeaderComponent,
     HttpClientModule,
     MainContentComponent,
     RouterOutlet,
-    StoreDevtoolsModule.instrument({
-      name: 'Spoty fi'
-    }),
     StoreModule.forRoot(reducers, {
       metaReducers,
+    }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, 
+      name: 'Spotty fi'
     })
   ],
   declarations: [
