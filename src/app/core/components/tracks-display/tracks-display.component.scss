@@ -1,4 +1,26 @@
-.tracks-display-container {
-    display: flex;
-    
+@import '../../../../variables.scss';
+
+
+
+.track-display-controls,  .track-info-browser, .track-browsing-options {
+    border: .2em solid $green-lightest;
+    border-radius: 1em;
+    margin: 1em;
+    padding: 1em;
+
+    .slider {
+        width: 85%;
+    }
+
+    .track-info {
+        width: 90%;
+    }
+}
+
+.track-container {
+    margin: 0 1em;
+
+    .track:hover {
+        cursor: pointer;
+    }
 }

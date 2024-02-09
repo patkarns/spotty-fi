@@ -1,24 +1,38 @@
-<button mat-raised-button (click)="tracksFacade.getUserSavedTracks()">
-  Get Saved Tracks
-</button>
-<div>
-  <mat-grid-list cols="2" rowHeight="2:1">
-    <mat-grid-tile
-      *ngFor="let track of tracksFacade.tracks$ | async"
-      (click)="playbackService.addToPlaybackQueue(track.uri)"
-    >
-      <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" matRipple
-      [matRippleCentered]="false"
-      [matRippleDisabled]="false"
-      [matRippleUnbounded]="false"
-  
-      >
-    </mat-grid-tile>
-  </mat-grid-list>
+<div class="track-browsing-options">
+    <button mat-raised-button (click)="tracksFacade.getUserSavedTracks()">
+        Get Saved Tracks
+    </button>
 </div>
 
+<div class="track-info-browser">
+    <div>
+        <mat-chip-set aria-label="Genres">
+            <mat-chip [ngStyle]="{'background-color': genreItem.color }" *ngFor="let genreItem of popularGenresItems$ | async">
+                {{genreItem.genre}}</mat-chip>
+        </mat-chip-set>
+    </div>
+</div>
 
-<!-- TODO: cursor pointer -->
+<div class="track-display-controls">
+    <mat-grid-list cols="6" rowHeight="2:1">
+        <mat-grid-tile colspan="2" class="category-selection">
+            <div *ngIf="trackInfo" class="track-info">
+                <p>{{trackInfo.name}}</p>
+                <p>{{trackInfo.artists[0].name}}</p>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="4" class="category-selection">
+            <mat-slider color="warn" class="slider" [max]="tracksFacade.pageCount$ | async" [min]="0" [step]="1">
+                <input matSliderThumb [(ngModel)]="tracksSearchOffsetValue" (dragEnd)="tracksFacade.updateSearchOffset(tracksSearchOffsetValue)" #slider>
+            </mat-slider>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
 
-<!-- [matRippleRadius]="radius"
-[matRippleColor]="color" -->
+<mat-grid-list class="track-container" cols="5" rowHeight="2:1">
+    <mat-grid-tile class="track" (mouseenter)="trackInfo = track" (mouseleave)="trackInfo = null" matRipple colspan="1"
+        *ngFor="let track of (tracksFacade.tracks$ | async)" (click)="playbackService.addToPlaybackQueue(track.uri)">
+        <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" matRipple [matRippleCentered]="false"
+            [matRippleDisabled]="false" [matRippleUnbounded]="false">
+    </mat-grid-tile>
+</mat-grid-list>
