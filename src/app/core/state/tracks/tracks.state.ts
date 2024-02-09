@@ -5,4 +5,6 @@ export const initialState: Tracks = {
   isLoaded: false,
   tracks: [],
   count: 0,
+  searchOffset: 0,
+  pageSize: 50
 };
