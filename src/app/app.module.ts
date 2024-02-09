@@ -14,12 +14,12 @@ import { reducers, metaReducers } from './core/state';
 import { LoginEffects } from './core/state/login';
 import { TracksEffects } from './core/state/tracks';
 import { GenreEffects } from './core/state/genre';
-
+import { PlaybackEffects } from './core/state/playback'
 
 @NgModule({
   imports: [
     BrowserModule,
-    EffectsModule.forRoot([GenreEffects, LoginEffects, TracksEffects]),
+    EffectsModule.forRoot([GenreEffects, LoginEffects, PlaybackEffects, TracksEffects]),
     HeaderComponent,
     HttpClientModule,
     MainContentComponent,
