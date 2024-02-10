@@ -1,0 +1,12 @@
+<div class="scroll-list" [ngStyle]="{'height.rem': heightRem, 'width.rem': widthRem }">
+    <div *ngFor="let listItem of (listItems$ | async); let i = index" (click)="listItemClickEvent.emit(listItem.id)"
+        class="scroll-list-item" [ngStyle]="{'background-color': scrollListItemColor[i%2] }">
+        <div>
+            <p class="text main-text">{{listItem.mainText}}</p>
+            <p class="text subtitle-text">{{listItem.subtitleText}}</p>
+        </div>
+        <button mat-icon-button *ngIf="enableDelete" (click)="listItemDeleteEvent.emit(listItem.id)">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+</div>
