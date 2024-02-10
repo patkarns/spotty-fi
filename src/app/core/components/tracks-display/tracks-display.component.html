@@ -1,41 +1,53 @@
 <div class="track-display-controls">
-    <mat-grid-list cols="6" rowHeight="2:1">
+    <mat-grid-list cols="6" rowHeight="4:1">
 
+        <mat-grid-tile colspan="2" class="category-selection">
+            <button mat-raised-button (click)="tracksFacade.getUserSavedTracks()">
+                <mat-icon>favorite</mat-icon>Browse Saved Tracks
+            </button>
+        </mat-grid-tile>
         <mat-grid-tile colspan="4" class="category-selection">
-            <mat-slider color="warn" class="slider" [max]="tracksFacade.pageCount$ | async" [min]="0" [step]="1">
+            <mat-slider *ngIf="tracksFacade.isLoaded$ | async" color="warn" class="slider"
+                [max]="tracksFacade.pageCount$ | async" [min]="0" [step]="1">
                 <input matSliderThumb [(ngModel)]="tracksSearchOffsetValue"
                     (dragEnd)="tracksFacade.updateSearchOffset(tracksSearchOffsetValue)" #slider>
             </mat-slider>
         </mat-grid-tile>
-        <mat-grid-tile colspan="2" class="category-selection">
-            <button mat-raised-button (click)="tracksFacade.getUserSavedTracks()">
-                Get Saved Tracks
-            </button>
-        </mat-grid-tile>
     </mat-grid-list>
 </div>
 
-<div class="track-browsing-options">
-    <div>
-        <mat-chip-listbox aria-label="Genres">
+<ng-container >
+    <div class="track-browsing-options" *ngIf="tracksFacade.isLoaded$ | async">
+        <mat-chip-listbox>
             <mat-chip-option (click)="handleGenreToggle(genreItem.name)"
                 [ngStyle]="{'background-color': genreItem.color }"
                 *ngFor="let genreItem of popularGenresItems$ | async">
                 {{genreItem.name}}</mat-chip-option>
         </mat-chip-listbox>
     </div>
-</div>
+
+    <div class="track-container">
+        <mat-grid-list cols="5" rowHeight="2:1" *ngIf="!(tracksFacade.isLoading$ | async) || (tracksFacade.isLoaded$ | async); else tracksLoadingSpinner">
+        
+            <mat-grid-tile class="track-tile" (mouseenter)="trackInfo = track" (mouseleave)="trackInfo = null" matRipple
+                colspan="1" *ngFor="let track of (tracksFacade.tracks$ | async)"
+                (click)="playbackFacade.addToPlaybackQueue(track.uri)">
+                <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" matRipple
+                    [matRippleCentered]="false" [matRippleDisabled]="false" [matRippleUnbounded]="false">
+                <div *ngIf="trackInfo" class="track-info-overlay">
+                    <div class="track-info-wrapper">
+                        <p class="text main-text">{{trackInfo.name}}</p>
+                        <p class="text subtitle-text">{{trackInfo.artists[0].name}}</p>
+                    </div>
+                </div>
+            </mat-grid-tile>
+         
+
+        </mat-grid-list>
+        <ng-template #tracksLoadingSpinner><mat-spinner color="warn"></mat-spinner></ng-template>
+    </div>
+
+</ng-container>
 
 
-<mat-grid-list class="track-container" cols="5" rowHeight="2:1">
-    <mat-grid-tile class="track-tile" (mouseenter)="trackInfo = track" (mouseleave)="trackInfo = null" matRipple colspan="1"
-        *ngFor="let track of (tracksFacade.tracks$ | async)" (click)="playbackFacade.addToPlaybackQueue(track.uri)">
-        <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" matRipple [matRippleCentered]="false"
-            [matRippleDisabled]="false" [matRippleUnbounded]="false">
-            <div *ngIf="trackInfo" class="track-info-overlay">
-                <div class="track-info-wrapper">
-                    <p class="text main-text">{{trackInfo.name}}</p>
-                    <p class="text subtitle-text">{{trackInfo.artists[0].name}}</p></div>
-            </div>
-    </mat-grid-tile>
-</mat-grid-list>
+

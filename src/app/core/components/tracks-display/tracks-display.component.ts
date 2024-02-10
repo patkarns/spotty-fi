@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import {
   sortBy,
@@ -27,7 +29,6 @@ import {
 } from 'rxjs';
 
 import { TracksFacade } from '../../facades/tracks.facade';
-import { PlaybackService } from '../../services/playback.service';
 import { Track } from '../../state/tracks';
 import { GenreFacade } from '../../facades/genre.facade';
 import { PlaybackFacade } from '../../facades/playback.facade';
@@ -41,10 +42,12 @@ import { PlaybackFacade } from '../../facades/playback.facade';
     MatButtonModule,
     MatChipsModule,
     MatGridListModule,
+    MatIconModule,
     MatRippleModule,
     MatSliderModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './tracks-display.component.html',
   styleUrl: './tracks-display.component.scss',
@@ -52,9 +55,10 @@ import { PlaybackFacade } from '../../facades/playback.facade';
 export class TracksDisplayComponent implements OnInit {
   public tracksSearchOffsetValue: number = 0;
   private chipColors = {
-    greenLightest: '#d7ebba',
-    greenLighter: '#c6e29c',
-    greenLight: '#b2d879',
+    greenLightest: '#f9fcf5',
+    greenLighter: '#eef6e2',
+    greenLight: '#d7ebba',
+    green: '#c6e29c'
   };
   public trackInfo: Track | null = null;
   public selectedGenre: string | null = null;
@@ -92,8 +96,8 @@ export class TracksDisplayComponent implements OnInit {
               name,
               color:
                 count > meanCount
-                  ? this.chipColors.greenLight
-                  : this.chipColors.greenLightest,
+                  ? this.chipColors.green
+                  : this.chipColors.greenLighter,
             }));
           })
         );

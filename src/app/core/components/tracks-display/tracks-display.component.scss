@@ -2,26 +2,8 @@
 
 .track-display-controls,
 .track-browsing-options {
-  border-radius: 1em;
   margin: 1em;
-  padding: 1em;
-
-//   .search-input {
-//     padding: 1rem;
-//     border: 0.2em solid $color-green-light;
-//     border-radius: 0.5em;
-//     width: 100%;
-//   }
-
-//   .search-button-container {
-//     justify-content: end;
-//     justify-content: flex-start !important ;
-//     align-items: flex-start !important;
-//   }
-
-//   .search-button {
-//     margin: 1em;
-//   }
+  padding: .5em 0;
 
   .slider {
     width: 85%;
@@ -78,6 +60,10 @@
         font-weight: 300;
       }
     }
+  }
+
+  mat-spinner {
+    margin: 0 auto;
   }
 }
 
