@@ -3,3 +3,27 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Scrollbar style */
+
+/* Width */
+ ::-webkit-scrollbar {
+    width: 1em;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 .2em #9e9e9e;
+    border-radius: 1em;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background:#eef6e2;
+    border-radius: 1em;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #d7ebba;
+}
