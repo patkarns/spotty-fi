@@ -11,28 +11,28 @@ export const tracksReducer = createReducer(
     tracks: [],
     count: 0,
     isLoading: true,
-    loaded: false
+    isLoaded: false
   })),
   on(TracksActions.getUserSavedTracksSuccess, (state, { tracks, count }) => ({
     ...state,
     tracks,
     count,
     isLoading: false,
-    loaded: true
+    isLoaded: true
   })),
   on(TracksActions.getUserSavedTracksFailed, (state, { error }) => ({
     ...state,
     tracks: [],
     count: 0,
     isLoading: false,
-    loaded: false
+    isLoaded: false
   })),
   on(TracksActions.updateSearchOffset, (state, { searchOffset }) => ({
     ...state,
     tracks: [],
     searchOffset,
-    isLoading: false,
-    loaded: false
+    isLoading: true,
+    isLoaded: false
   }))
 );
 
