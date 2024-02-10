@@ -16,8 +16,11 @@
     </mat-grid-list>
 </div>
 
-<ng-container >
-    <div class="track-browsing-options" *ngIf="tracksFacade.isLoaded$ | async">
+<app-playlists></app-playlists>
+
+<ng-container *ngIf="tracksFacade.isLoaded$ | async">
+    <!-- playlist goes here -->
+    <div class="track-browsing-options">
         <mat-chip-listbox>
             <mat-chip-option (click)="handleGenreToggle(genreItem.name)"
                 [ngStyle]="{'background-color': genreItem.color }"
@@ -26,25 +29,30 @@
         </mat-chip-listbox>
     </div>
 
-    <div class="track-container">
-        <mat-grid-list cols="5" rowHeight="2:1" *ngIf="!(tracksFacade.isLoading$ | async) || (tracksFacade.isLoaded$ | async); else tracksLoadingSpinner">
-        
-            <mat-grid-tile class="track-tile" (mouseenter)="trackInfo = track" (mouseleave)="trackInfo = null" matRipple
-                colspan="1" *ngFor="let track of (tracksFacade.tracks$ | async)"
-                (click)="playbackFacade.addToPlaybackQueue(track.uri)">
-                <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" matRipple
-                    [matRippleCentered]="false" [matRippleDisabled]="false" [matRippleUnbounded]="false">
-                <div *ngIf="trackInfo" class="track-info-overlay">
-                    <div class="track-info-wrapper">
-                        <p class="text main-text">{{trackInfo.name}}</p>
-                        <p class="text subtitle-text">{{trackInfo.artists[0].name}}</p>
-                    </div>
-                </div>
-            </mat-grid-tile>
-         
 
-        </mat-grid-list>
-        <ng-template #tracksLoadingSpinner><mat-spinner color="warn"></mat-spinner></ng-template>
-    </div>
 
 </ng-container>
+
+<div class="track-container">
+    <mat-grid-list cols="5" rowHeight="2:1"
+        *ngIf="!(tracksFacade.isLoading$ | async) || (tracksFacade.isLoaded$ | async); else tracksLoadingSpinner">
+
+        <mat-grid-tile class="track-tile" (mouseenter)="trackInfo = track" (mouseleave)="trackInfo = null" matRipple
+            colspan="1" *ngFor="let track of (tracksFacade.tracks$ | async)"
+            (click)="playbackFacade.addToPlaybackQueue(track.uri)">
+            <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" matRipple [matRippleCentered]="false"
+                [matRippleDisabled]="false" [matRippleUnbounded]="false">
+            <div *ngIf="trackInfo" class="track-info-overlay">
+                <div class="track-info-wrapper">
+                    <p class="text main-text">{{trackInfo.name}}</p>
+                    <p class="text subtitle-text">{{trackInfo.artists[0].name}}</p>
+                </div>
+            </div>
+        </mat-grid-tile>
+
+
+    </mat-grid-list>
+    <ng-template #tracksLoadingSpinner>
+        <mat-spinner color="warn"></mat-spinner>
+    </ng-template>
+</div>

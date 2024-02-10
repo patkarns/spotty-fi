@@ -10,6 +10,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
   sortBy,
@@ -32,6 +34,8 @@ import { TracksFacade } from '../../facades/tracks.facade';
 import { Track } from '../../state/tracks';
 import { GenreFacade } from '../../facades/genre.facade';
 import { PlaybackFacade } from '../../facades/playback.facade';
+import { PlaylistsFacade } from '../../facades/playlists.facade';
+import { PlaylistsComponent } from '../playlists/playlists.component';
 
 @Component({
   selector: 'app-tracks-display',
@@ -47,7 +51,10 @@ import { PlaybackFacade } from '../../facades/playback.facade';
     MatSliderModule,
     MatInputModule,
     MatFormFieldModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatExpansionModule,
+    BrowserAnimationsModule,
+    PlaylistsComponent
   ],
   templateUrl: './tracks-display.component.html',
   styleUrl: './tracks-display.component.scss',
@@ -68,11 +75,13 @@ export class TracksDisplayComponent implements OnInit {
 
   constructor(
     public playbackFacade: PlaybackFacade,
+    public playlistsFacade: PlaylistsFacade,
     public tracksFacade: TracksFacade,
-    private genreFacade: GenreFacade,
+    private genreFacade: GenreFacade
   ) {}
 
   public ngOnInit(): void {
+    this.tracksFacade.tracks$.subscribe(t => console.log('tracks', t))
     this.popularGenresItems$ = combineLatest([
       this.tracksFacade.artistsById$,
       this.tracksFacade.pageCount$,
