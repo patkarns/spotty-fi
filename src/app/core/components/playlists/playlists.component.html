@@ -1,0 +1,38 @@
+<mat-accordion>
+    <mat-expansion-panel (opened)="panelOpenState = true; playlistsFacade.getUserPlaylists()"
+        (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon>playlist_play</mat-icon>My Playlists
+            </mat-panel-title>
+            <!-- <mat-panel-description>
+                Currently I am {{panelOpenState ? 'open' : 'closed'}}
+            </mat-panel-description> -->
+        </mat-expansion-panel-header>
+        <div class="playlist-section">
+            <div class="playlist-subsection">
+                <app-scroll-list [listItems$]="playlistListItems$" [widthRem]="15" [heightRem]="15"
+                    (listItemClickEvent)="selectPlaylist($event)"></app-scroll-list>
+            </div>
+            <div class="playlist-subsection playlist-info" *ngIf="selectedPlaylist; else selectAPlaylistPrompt">
+
+                <!-- <img class="album-cover" src="{{ selectedPlaylist.imageUrl }}" /> -->
+                <div class="text-wrapper">
+                    <p class="text main-text"> {{selectedPlaylist.name}}</p> {{selectedPlaylist.id}}
+                    <p class="text subtitle-text">{{selectedPlaylist.owner.id}}</p>
+                </div>
+                <app-scroll-list [listItems$]="playlistTrackListItems$" [heightRem]="15" [enableDelete]="true">
+                </app-scroll-list>
+            </div>
+            <ng-template #selectAPlaylistPrompt>
+                <div class="playlist-subsection playlist-info">
+                    <div class="text-wrapper">
+                        <p class="text main-text">No playlist selected</p>
+                        <p class="text subtitle-text">Select a playlist from the left to begin</p>
+                    </div>
+
+                </div>
+            </ng-template>
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>

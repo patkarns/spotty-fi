@@ -1,0 +1,38 @@
+@import "../../../../variables.scss";
+
+.playlist-section {
+    display: flex;
+
+    .playlist-subsection {
+        padding: 1rem;
+
+        &.playlist-info {
+            display: flex;
+            color: $color-grey-darker;
+            height: 15rem;
+            width: 100%;
+            justify-content: space-between;
+
+            .text-wrapper {
+                margin: 0 1rem;
+                flex: 1;
+                height: 15rem;
+
+                .text {
+                    color: $color-grey-darkest;
+                    text-align: left;
+    
+                    &.main-text {
+                        font-weight: 500;
+                        font-size: large;
+                    }
+    
+                    &.subtitle-text {
+                        font-weight: 300;
+                    }
+                }
+            }
+
+        }
+    }
+}
