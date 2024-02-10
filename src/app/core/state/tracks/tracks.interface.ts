@@ -41,6 +41,7 @@ export enum AlbumType {
 export enum SpotifyObjectType {
   Artist = 'artist',
   Track = 'track',
-  Album = 'album'
+  Album = 'album',
+  Playlist = 'playlist'
 }
 
