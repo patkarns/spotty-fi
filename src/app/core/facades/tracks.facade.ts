@@ -8,14 +8,12 @@ import { getArtistsById, getCountsPerArtistId, getIsLoading, getIsLoaded, getTra
 import * as TracksActions from '../state/tracks';
 import { Track, SpotifyObject } from '../state/tracks';
 
-
-
 @Injectable({
     providedIn: 'root'
 })
 export class TracksFacade {
     isLoading$: Observable<boolean> = this.store.select(getIsLoading);
-    isLoggedIn$: Observable<boolean> = this.store.select(getIsLoaded);
+    isLoaded$: Observable<boolean> = this.store.select(getIsLoaded);
     tracks$: Observable<Track[]> = this.store.select(getTracks);
     count$: Observable<number> = this.store.select(getCount);
     pageCount$: Observable<number> = this.store.select(getPageCount);
