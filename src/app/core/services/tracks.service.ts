@@ -94,7 +94,7 @@ export class TracksService {
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`)
 
-    const url = `https://api.spotify.com/v1/search?q=genre:"${genre}"&type=track&limit=${limit}&offset=${offset}`
+    const url = `https://api.spotify.com/v1/search?q=genre:"${genre}"&type=track&limit=${limit}`
     
     // const url = `https://api.spotify.com/v1/search?q="${query}" genre:"${genre}"&type=track&limit=${limit}&offset=${offset}`
     return (
