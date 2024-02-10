@@ -15,11 +15,12 @@ import { LoginEffects } from './core/state/login';
 import { TracksEffects } from './core/state/tracks';
 import { GenreEffects } from './core/state/genre';
 import { PlaybackEffects } from './core/state/playback'
+import { PlaylistEffects } from './core/state/playlists';
 
 @NgModule({
   imports: [
     BrowserModule,
-    EffectsModule.forRoot([GenreEffects, LoginEffects, PlaybackEffects, TracksEffects]),
+    EffectsModule.forRoot([GenreEffects, LoginEffects, PlaybackEffects, TracksEffects, PlaylistEffects]),
     HeaderComponent,
     HttpClientModule,
     MainContentComponent,
