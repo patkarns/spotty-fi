@@ -1,8 +1,10 @@
+@import "../../../../variables.scss";
+
 .container {
     display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 100%;
+  width: 20rem;
   height: 100%;
 
   // .content {
@@ -25,5 +27,20 @@
     }
   // }
 
+
+  .playback-track-info {
+    .text {
+      color: $color-grey-darkest;
+      margin: 0;
+  
+      &.main-text {
+        font-weight: 500;
+      }
+  
+      &.subtitle-text {
+        font-weight: 300;
+      }
+    }
+  }
   
 }

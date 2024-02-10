@@ -1,18 +1,28 @@
 <div class="container">
   <div id="spotify-player"></div>
-<div class="content">
-    <!-- <div *ngIf="isActive"> -->
-      <img src={{currentTrack.album.images[0].url}} className="now-playing__cover" alt="" />
-      <div>
-
-      <div *ngIf="currentTrack.name">{{currentTrack.name}} ({{currentTrack.artists[0].name}})</div>
-      <div class="playback-controls"><button mat-raised-button (click)="previousTrack()">
-        <span class="material-icons-round">skip_previous</span>
-      </button>
-      <button mat-raised-button (click)="togglePlay()">Pause</button>
-      <button mat-raised-button (click)="nextTrack()">
-          <span class="material-icons-round">skip_next</span>
-      </button></div>
+  <div *ngIf="!isActive"><button mat-raised-button (click)="transferPlaybackToDevice()">
+    Transfer Playback to Device
+  </button></div>
+  <div class="content" *ngIf="isActive">
+    
+    <img src="{{ currentTrack.album.images[0].url }}"/>
+    <div>
+      <div *ngIf="currentTrack.name" class="playback-track-info">
+        <div class="text main-text">{{ currentTrack.name }}</div>
+        <div class="text subtitle-text">{{ currentTrack.artists[0].name }}</div>
+      </div>
+      <div class="playback-controls">
+        <button  mat-icon-button (click)="previousTrack()">
+          <mat-icon>skip_previous</mat-icon>
+        </button>
+        <button mat-icon-button (click)="togglePlay()">
+          <mat-icon *ngIf="isPaused ">play_arrow</mat-icon>
+          <mat-icon *ngIf="!isPaused ">pause</mat-icon>
+        </button>
+        <button mat-icon-button (click)="nextTrack()">
+          <mat-icon>skip_next</mat-icon>
+        </button>
+      </div>
     </div>
-</div>
+  </div>
 </div>

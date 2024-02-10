@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService } from '../../services/auth.service';
 import { PlaybackService } from '../../services/playback.service';
@@ -24,12 +25,12 @@ declare global {
 @Component({
   selector: 'app-web-playback',
   standalone: true,
-  imports: [CommonModule, MatButtonModule ],
+  imports: [CommonModule, MatButtonModule, MatIconModule ],
   templateUrl: './web-playback.component.html',
   styleUrls: ['./web-playback.component.scss']
 })
 export class WebPlaybackComponent implements OnInit {
-
+  public deviceId = '';
   isPaused: boolean = false;
   isActive: boolean = false;
   player: any;
@@ -60,6 +61,7 @@ export class WebPlaybackComponent implements OnInit {
       });
 
       this.player.addListener('ready', ({ device_id }: { device_id: string}) => {
+        this.deviceId = device_id;
         console.log('Ready with Device ID', device_id, this.currentTrack);
       });
 
@@ -68,6 +70,7 @@ export class WebPlaybackComponent implements OnInit {
       });
 
       this.player.addListener('player_state_changed', (state: any) => {
+        console.log('State Changed', state)
         if (!state) {
           return;
         }
@@ -100,5 +103,10 @@ export class WebPlaybackComponent implements OnInit {
   nextTrack() {
     this.player.nextTrack();
     this.playbackService.getUserQueue();
+  }
+
+  transferPlaybackToDevice() {
+    this.playbackService.transferPlaybackToDevice(this.deviceId);
+    console.log('this.deviceId transfer', this.deviceId)
   }
 }
