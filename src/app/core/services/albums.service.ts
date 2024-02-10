@@ -1,23 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import { first } from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { SpotifyObjectType, SpotifyObject, Track, Album, AlbumType } from '../state/tracks';
+import { Track, Album, AlbumType } from '../state/tracks';
 import { AuthService } from './auth.service';
+import { SpotifyObjectApiResponse } from '../services/tracks.service';
+
 
 interface AlbumApiResponse extends SpotifyObjectApiResponse {
   images: {
     url: string;
   }[]
-}
-
-interface SpotifyObjectApiResponse {
-  uri: string,
-  name: string,
-  id: string,
-  type: SpotifyObjectType
 }
 
 interface AlbumApiResponse extends SpotifyObjectApiResponse {
@@ -55,7 +51,7 @@ export class AlbumsService {
             id: album.id,
             uri: album.uri,
             type: AlbumType[album.album_type],
-            imageUrl: album.images.length ? album.images[0].url : ''
+            imageUrl: first(album.images)?.url
           }) as Album);
 
         return albums;

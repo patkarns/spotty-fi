@@ -4,15 +4,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { SpotifyObjectType, SpotifyObject } from '../state/tracks';
+import { SpotifyObject } from '../state/tracks';
 import { AuthService } from './auth.service';
-
-interface SpotifyObjectApiResponse {
-  uri: string,
-  name: string,
-  id: string,
-  type: SpotifyObjectType
-}
+import { SpotifyObjectApiResponse } from '../services/tracks.service';
 
 interface ArtistApiResponse extends SpotifyObjectApiResponse {
   // popularity: number

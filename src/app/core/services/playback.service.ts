@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { EMPTY } from "rxjs";
+import { first } from 'lodash';
 import { map } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
 import { TrackApiResponse } from './tracks.service';
 import { SpotifyObject, Track } from '../state/tracks';
 import { Observable } from 'rxjs';
+
 
 interface UserQueueApiResponse {
   currently_playing: TrackApiResponse,
@@ -39,7 +40,7 @@ export class PlaybackService {
           name: item.name,
           id: item.id,
           popularity: item.popularity,
-          imageUrl: item.album.images.length ? item.album.images[0].url : '',
+          imageUrl: first(item.album.images)?.url,
           uri: item.uri,
           type: item.type,
           album: {

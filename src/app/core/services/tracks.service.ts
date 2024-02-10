@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import { first } from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SpotifyObjectType, SpotifyObject, Track } from '../state/tracks';
 import { AuthService } from './auth.service';
+import { mapTrackApiResponsesToTrack } from './service-mapper-utils';
 
 interface AlbumApiResponse extends SpotifyObjectApiResponse {
   images: {
@@ -13,7 +15,7 @@ interface AlbumApiResponse extends SpotifyObjectApiResponse {
   }[]
 }
 
-interface SpotifyObjectApiResponse {
+export interface SpotifyObjectApiResponse {
   uri: string,
   name: string,
   id: string,
@@ -37,7 +39,7 @@ interface SavedTracksApiResponse {
 }
 
 
-interface SearchTracksApiResponse {
+export interface SearchTracksApiResponse {
   tracks: {
     items: TrackApiResponse[],
     total: number;
@@ -61,28 +63,7 @@ export class TracksService {
       this.http.get<SavedTracksApiResponse>(getUserSavedTracksUrl, { headers }).pipe(
         map(response => {
           const count = response.total;
-
-          const tracks: Track[] = response.items.map(item => ({
-            name: item.track.name,
-            id: item.track.id,
-            popularity: item.track.popularity,
-            imageUrl: item.track.album.images.length ? item.track.album.images[0].url : '',
-            uri: item.track.uri,
-            addedAt: item.added_at,
-            type: item.track.type,
-            album: {
-              name: item.track.album.name,
-              id: item.track.album.id,
-              uri: item.track.album.uri
-            } as SpotifyObject,
-            artists: item.track.artists.map(artistResponse => ({
-              name: artistResponse.name,
-              id: artistResponse.id,
-              uri: artistResponse.uri,
-              type: artistResponse.type
-            } as SpotifyObject))
-          } as Track));
-  
+          const tracks: Track[] = response.items.map(item => mapTrackApiResponsesToTrack(item.track));
         return { tracks, count };
         })
       )
@@ -106,7 +87,7 @@ export class TracksService {
             name: item.name,
             id: item.id,
             popularity: item.popularity,
-            imageUrl: item.album.images.length ? item.album.images[0].url : '',
+            imageUrl: first(item.album.images)?.url,
             uri: item.uri,
             type: item.type,
             album: {
