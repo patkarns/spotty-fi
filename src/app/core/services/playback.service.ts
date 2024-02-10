@@ -8,7 +8,6 @@ import { AuthService } from './auth.service';
 import { TrackApiResponse } from './tracks.service';
 import { SpotifyObject, Track } from '../state/tracks';
 import { Observable } from 'rxjs';
-import { response } from 'express';
 
 interface UserQueueApiResponse {
   currently_playing: TrackApiResponse,
@@ -21,7 +20,7 @@ interface UserQueueApiResponse {
 export class PlaybackService {
   constructor(private authService: AuthService, private http: HttpClient) {}
 
-  addToPlaybackQueue(trackUri: string): Observable<string> {
+  public addToPlaybackQueue(trackUri: string): Observable<string> {
     const token = this.authService.getToken();
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}` )
@@ -29,7 +28,7 @@ export class PlaybackService {
     return this.http.post<string>(url, null, { headers }).pipe(map(response => response));
   }
 
-  getUserQueue(): Observable<Track[]> {
+  public getUserQueue(): Observable<Track[]> {
     const url = 'https://api.spotify.com/v1/me/player/queue';
     const token = this.authService.getToken();
     let headers = new HttpHeaders();
@@ -57,5 +56,13 @@ export class PlaybackService {
         } as Track));
       })
     );    
+  }
+
+  public transferPlaybackToDevice(deviceId: string): void {
+    const token = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${token}` )
+    const url = `https://api.spotify.com/v1/me/player`;
+    this.http.put<string>(url, { device_ids: [deviceId]}, { headers }).subscribe();
   }
 }
