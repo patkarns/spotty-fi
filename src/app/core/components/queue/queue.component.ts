@@ -13,8 +13,8 @@ import { PlaybackFacade } from '../../facades/playback.facade';
 })
 export class QueueComponent implements OnInit {
   public queueItemColor: { [key: number]: string } = {
-    0: '#eef6e2',
-    1: '#d7ebba'
+    0: '#f9fcf5',
+    1: '#ffffff'
   }
 
   constructor(public playbackFacade: PlaybackFacade) {
