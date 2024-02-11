@@ -1,7 +1,8 @@
 import { first } from 'lodash';
 
-import { SpotifyObject, Track } from '../state/tracks';
-import { TrackApiResponse } from './tracks.service';
+import { Track } from '../../shared/interfaces/state/track-interface';
+import { SpotifyObject } from '../../shared/interfaces/state/spotify-object.interface';
+import { TrackApiResponse } from '../../shared/interfaces/api-responses.interface';
 
 export function mapTrackApiResponsesToTrack(
   trackApiResponse: TrackApiResponse
