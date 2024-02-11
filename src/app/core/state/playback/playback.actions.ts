@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 
-import { Track } from "../tracks";
+import { Track } from "../../../shared/interfaces/state/track-interface";
 
 export enum PlaybackActionType {
   GET_USER_QUEUE = '[PLAYBACK] Get User Queue',

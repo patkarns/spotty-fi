@@ -3,16 +3,16 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { getQueue } from '../state/playback/playback.selector';
+import { getQueue, getIsLoading, getIsLoaded } from '../state/playback/playback.selector';
 import * as PlaybackActions from '../state/playback/playback.actions';
-import { Track } from '../state/tracks';
+import { Track } from '../../shared/interfaces/state/track-interface';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PlaybackFacade {
-    // isLoading$: Observable<boolean> = this.store.select(getIsLoading);
-    // isLoggedIn$: Observable<boolean> = this.store.select(getIsLoaded);
+    isLoading$: Observable<boolean> = this.store.select(getIsLoading);
+    isLoaded$: Observable<boolean> = this.store.select(getIsLoaded);
     queue$: Observable<Track[]> = this.store.select(getQueue);
 
     constructor(private store: Store) {

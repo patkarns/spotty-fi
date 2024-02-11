@@ -13,5 +13,4 @@ import { QueueComponent } from '../../components/queue/queue.component';
   styleUrl: './main-content.component.scss'
 })
 export class MainContentComponent {
-
 }
