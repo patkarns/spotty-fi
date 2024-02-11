@@ -6,14 +6,10 @@ import { Observable } from 'rxjs';
 import { getAvailableGenres } from '../state/genre/genre.selector';
 import * as GenreActions from '../state/genre/genre.actions';
 
-
-
 @Injectable({
     providedIn: 'root'
 })
 export class GenreFacade {
-    // isLoading$: Observable<boolean> = this.store.select(getIsLoading);
-    // isLoggedIn$: Observable<boolean> = this.store.select(getIsLoaded);
     availableGenres$: Observable<string[]> = this.store.select(getAvailableGenres);
 
     constructor(private store: Store) {

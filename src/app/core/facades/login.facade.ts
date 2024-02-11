@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { getLoading, getIsLoggedIn } from '../state/login';
@@ -17,6 +16,7 @@ export class LoginFacade {
     constructor(private store: Store) {
     }
 
+    setIsLoggedIn = (isLoggedIn: boolean) => this.store.dispatch(LoginActions.setIsLoggedIn({ isLoggedIn }))
     getLoginCredentials = () => this.store.dispatch(LoginActions.getLoginCredentials());
     logOut = () => this.store.dispatch(LoginActions.logout());
 }
