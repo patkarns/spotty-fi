@@ -1,4 +1,5 @@
-import { SpotifyObject, Track } from "../tracks";
+import { Track } from '../../../shared/interfaces/state/track-interface';
+import { Playlist } from '../../../shared/interfaces/state/playlist-interface';
 
 export interface Playlists {
     isLoading: boolean;
@@ -7,20 +8,9 @@ export interface Playlists {
     count: number;
     pageSize: number;
     searchOffset: number;
-    playlistTracksById: { [key: string]: Track }
+    playlistTracksById: { [key: string]: Track },
+    selectedTracksById: { [key: string]: Track },
+    isAddState: boolean,
+    selectedPlaylistId: string
 }
 
-export interface Playlist extends SpotifyObject {
-    public: boolean;
-    tracks: {
-        href: string,
-        total: number
-    }
-    description: string;
-    owner: PlaylistOwner;
-}
-
-export interface PlaylistOwner {
-    id: string;
-    displayName?: string;
-}

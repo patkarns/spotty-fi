@@ -1,4 +1,4 @@
-import { Track } from "../tracks";
+import { Track } from "../../../shared/interfaces/state/track-interface";
 
 export interface Playback {
   isLoading: boolean;

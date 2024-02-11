@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 
 import { getArtistsById, getCountsPerArtistId, getIsLoading, getIsLoaded, getTracks, getCount, getSearchOffset, getPageCount, getPageSize } from '../state/tracks/tracks.selector';
 import * as TracksActions from '../state/tracks';
-import { Track, SpotifyObject } from '../state/tracks';
+import { Track } from '../../shared/interfaces/state/track-interface';
+import { SpotifyObject } from '../../shared/interfaces/state/spotify-object.interface';
 
 @Injectable({
     providedIn: 'root'

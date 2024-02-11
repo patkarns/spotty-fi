@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 
-import { Track } from "./tracks.interface";
+import { Track } from "../../../shared/interfaces/state/track-interface";
 
 export enum TracksActionType {
   GET_USER_SAVED_TRACKS = '[TRACKS] Get User Saved Tracks',
