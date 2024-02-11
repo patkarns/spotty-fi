@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { switchMap, map, catchError, withLatestFrom } from 'rxjs/operators';
-import { map as _map } from 'lodash';
+import { map as _map, values } from 'lodash';
 
 import * as PlaylistActions from './playlists.actions';
 import { PlaylistsService } from '../../services/playlists.service';
@@ -44,7 +44,11 @@ export class PlaylistEffects {
 
   getPlaylistTracksByPlaylistId$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(PlaylistActions.getPlaylistTracksByPlaylistId.type),
+      ofType(
+        PlaylistActions.getPlaylistTracksByPlaylistId.type,
+        PlaylistActions.addTracksToPlaylistSuccess.type,
+        PlaylistActions.removeTracksFromPlaylist.type
+      ),
       switchMap((action) =>
         this.playlistsService
           .getPlaylistTracksByPlaylistId(action.playlistId)
@@ -66,15 +70,44 @@ export class PlaylistEffects {
   addTracksToPlaylist$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PlaylistActions.addTracksToPlaylist.type),
-      switchMap((action) =>
+      withLatestFrom(
+        this.playlistsFacade.selectedPlaylistId$,
+        this.playlistsFacade.selectedTracksById$
+      ),
+      switchMap(([, playlistId, selectedTracksById]) =>
         this.playlistsService
-          .addTracksToPlaylist(action.playlistId, action.trackUri)
+          .addTracksToPlaylist(
+            playlistId,
+            _map(values(selectedTracksById), 'uri')
+          )
           .pipe(
-            map(({ snapshotId }) =>
-              PlaylistActions.addTracksToPlaylistSuccess({ snapshotId })
+            map(() =>
+              PlaylistActions.addTracksToPlaylistSuccess({ playlistId })
             ),
             catchError((error) =>
               of(PlaylistActions.addTracksToPlaylistFailed({ error }))
+            )
+          )
+      )
+    )
+  );
+
+  removeTracksFromPlaylist$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PlaylistActions.removeTracksFromPlaylist.type),
+      withLatestFrom(
+        this.playlistsFacade.selectedPlaylistId$,
+        this.playlistsFacade.playlistTracksById$,
+      ),
+      switchMap(([action, playlistId, playlistTracksById]) =>
+        this.playlistsService
+          .removeTracksFromPlaylist(playlistId, action.trackIds.map((trackId: string) => playlistTracksById[trackId].uri))
+          .pipe(
+            map(() =>
+              PlaylistActions.removeTracksFromPlaylistSuccess({ playlistId })
+            ),
+            catchError((error) =>
+              of(PlaylistActions.removeTracksFromPlaylistFailed({ error }))
             )
           )
       )
