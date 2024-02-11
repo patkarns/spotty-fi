@@ -15,7 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { Output, EventEmitter } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ListItem } from '../../../core/models/list-item.model';
+import { ListItem } from '../../interfaces/list-item.interface';
 
 @Component({
   selector: 'app-scroll-list',
@@ -38,14 +38,17 @@ import { ListItem } from '../../../core/models/list-item.model';
   styleUrl: './scroll-list.component.scss'
 })
 export class ScrollListComponent {
-  @Input() widthRem = 30;
-  @Input() heightRem = 20;
+  @Input() widthRem: number = 30;
+  @Input() heightRem: number = 20;
   @Input() listItems$: Observable<ListItem[]> = of([]);
-  @Input() enableDelete = false;
+  @Input() enableDelete: boolean = false;
+  @Input() displayImage: boolean = false;
+  @Input() itemIdToHighlight: string | null = null;
 
   public scrollListItemColor: { [key: number]: string } = {
     0: '#f9fcf5',
-    1: '#ffffff'
+    1: '#ffffff',
+    2: '#c6e29c'
   }
 
   @Output() listItemClickEvent = new EventEmitter<string>();
