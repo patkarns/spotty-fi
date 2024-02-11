@@ -3,6 +3,9 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
+import { take } from 'rxjs';
+import { PlaybackFacade } from '../../facades/playback.facade';
+
 import { AuthService } from '../../services/auth.service';
 import { PlaybackService } from '../../services/playback.service';
 
@@ -43,57 +46,61 @@ export class WebPlaybackComponent implements OnInit {
     artists: [{ name: "" }]
   };
 
-  constructor(private authService: AuthService, private cdr: ChangeDetectorRef, private playbackService: PlaybackService) { 
+  constructor(private authService: AuthService, private cdr: ChangeDetectorRef, private playbackService: PlaybackService, private playbackFacade: PlaybackFacade) { 
   }
 
   ngOnInit(): void {
-    const token = this.authService.getToken();
-    const script = document.createElement("script");
-    script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      this.player = new window.Spotify.Player({
-        name: 'Web Playback SDK',
-        getOAuthToken: (cb: any) => { cb(token); },
-        volume: 0.5
-      });
-
-      this.player.addListener('ready', ({ device_id }: { device_id: string}) => {
-        this.deviceId = device_id;
-        console.log('Ready with Device ID', device_id, this.currentTrack);
-      });
-
-      this.player.addListener('not_ready', ({ device_id }: { device_id: string}) => {
-        console.log('Device ID has gone offline', device_id, this.currentTrack);
-      });
-
-      this.player.addListener('player_state_changed', (state: any) => {
-        console.log('State Changed', state)
-        if (!state) {
-          return;
-        }
-
-        if (this.currentTrack) {
-          
-          this.currentTrack = state.track_window.current_track;
-          this.cdr.detectChanges();
-        }
-        this.isPaused = state.paused;
-
-        this.player.getCurrentState().then((state: any) => {
-          this.isActive = !!state;
-        });
-      });
-
-      this.player.connect();
-    };
+    this.authService.retrieveToken().pipe(
+      take(1)
+    ).subscribe(({ accessToken }) => {
+      {
+        const script = document.createElement("script");
+        script.src = "https://sdk.scdn.co/spotify-player.js";
+        script.async = true;
+        document.body.appendChild(script);
+    
+        window.onSpotifyWebPlaybackSDKReady = () => {
+          this.player = new window.Spotify.Player({
+            name: 'Web Playback SDK',
+            getOAuthToken: (cb: any) => { cb(accessToken); },
+            volume: 0.5
+          });
+    
+          this.player.addListener('ready', ({ device_id }: { device_id: string}) => {
+            this.deviceId = device_id;
+            console.log('Ready with Device ID', device_id, this.currentTrack);
+          });
+    
+          this.player.addListener('not_ready', ({ device_id }: { device_id: string}) => {
+            console.log('Device ID has gone offline', device_id, this.currentTrack);
+          });
+    
+          this.player.addListener('player_state_changed', (state: any) => {
+            if (!state) {
+              return;
+            }
+    
+            if (this.currentTrack) {
+              
+              this.currentTrack = state.track_window.current_track;
+              this.cdr.detectChanges();
+            }
+            this.isPaused = state.paused;
+    
+            this.player.getCurrentState().then((state: any) => {
+              this.isActive = !!state;
+            });
+          });
+    
+          this.player.connect();
+        };
+      }
+    });
   }
 
   previousTrack() {
     this.player.previousTrack();
-    this.playbackService.getUserQueue();
+    this.playbackFacade.getUserQueue();
   }
 
   togglePlay() {
@@ -102,11 +109,10 @@ export class WebPlaybackComponent implements OnInit {
 
   nextTrack() {
     this.player.nextTrack();
-    this.playbackService.getUserQueue();
+    this.playbackFacade.getUserQueue();
   }
 
   transferPlaybackToDevice() {
     this.playbackService.transferPlaybackToDevice(this.deviceId);
-    console.log('this.deviceId transfer', this.deviceId)
   }
 }
