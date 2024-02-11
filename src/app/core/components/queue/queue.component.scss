@@ -2,28 +2,5 @@
 
 .queue-container {
     margin: 1em;
-    display: flex;
-
-    .queue {
-        overflow: auto;
-        height: 20rem;
-        width: 30rem;
-
-        .queue-item {
-            padding: .5em;
-
-            .text {
-                color: $color-grey-darkest;
-                margin: 0;
-
-                &.main-text {
-                    font-weight: 500;
-                }
-    
-                &.subtitle-text {
-                    font-weight: 300;
-                }
-            }
-        }
-    }
+    min-height: 20rem;
 }

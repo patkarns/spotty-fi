@@ -1,12 +1,8 @@
 <div class="queue-container">
-    <div class="queue">
-        <div
-        *ngFor="let track of (playbackFacade.queue$ | async); let i = index"
-            class="queue-item"
-            [ngStyle]="{'background-color': queueItemColor[i%2] }"
-        >
-        <p class="text main-text">{{track.name}}</p>
-        <p class="text subtitle-text">{{track.artists[0].name}}</p>
-        </div>
+    
+    <div *ngIf="(playbackFacade.queue$ | async)?.length">
+        <app-scroll-list [listItems$]="queueListItems$" [heightRem]="20" [displayImage]="true">
+        </app-scroll-list>
     </div>
+
 </div>
