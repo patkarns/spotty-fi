@@ -7,5 +7,9 @@ export const initialState: Playlists = {
   playlistTracksById: {},
   count: 0,
   pageSize: 50,
-  searchOffset: 0
+  searchOffset: 0,
+  selectedTracksById: {},
+  isAddState: false,
+  selectedPlaylistId: '',
+  // trackIdsToRemove: []
 }

@@ -46,7 +46,24 @@ export const playlistsReducer = createReducer(
     playlistTracks: [],
     isLoading: false,
     loaded: false
-  }))
+  })),
+  on(PlaylistActions.setIsAddState, (state, { isAddState }) => ({
+    ...state,
+    isAddState
+  })),
+  on(PlaylistActions.setSelectedTracksById, (state, { selectedTracksById }) => ({
+    ...state,
+    selectedTracksById
+  })),
+  on(PlaylistActions.setSelectedPlaylistId, (state, { selectedPlaylistId }) => ({
+    ...state,
+    selectedPlaylistId
+  })),
+  on(PlaylistActions.addTracksToPlaylistSuccess, (state) => ({
+    ...state,
+    selectedTracksById: {},
+    isAddState: false
+  }))  
 );
 
 export function reducer(state: Playlists | undefined, action: Action) {

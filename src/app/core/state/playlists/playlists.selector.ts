@@ -54,3 +54,23 @@ export const getSearchOffset = createSelector(
   getPlaylistsState,
   (state: Playlists) => state.searchOffset
 );
+
+export const getIsAddState = createSelector(
+  getPlaylistsState,
+  (state: Playlists) => state.isAddState
+);
+
+export const getSelectedPlaylistId = createSelector(
+  getPlaylistsState,
+  (state: Playlists) => state.selectedPlaylistId
+);
+
+export const getSelectedTracksById = createSelector(
+  getPlaylistsState,
+  (state: Playlists) => state.selectedTracksById
+);
+
+// export const getTrackIdsToRemove = createSelector(
+//   getPlaylistsState,
+//   (state: Playlists) => state.trackIdsToRemove
+// )
