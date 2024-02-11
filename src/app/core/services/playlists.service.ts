@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
 import {
-  SearchTracksApiResponse,
   SpotifyObjectApiResponse,
   TrackApiResponse,
-} from '../services/tracks.service';
-import { Playlist, PlaylistOwner } from '../state/playlists';
+} from '../../shared/interfaces/api-responses.interface';
+import {
+  Playlist,
+  PlaylistOwner,
+} from '../../shared/interfaces/state/playlist-interface';
 import { mapTrackApiResponsesToTrack } from './service-mapper-utils';
-import { Track } from '../state/tracks';
-import { first, isArguments } from 'lodash';
+import { Track } from '../../shared/interfaces/state/track-interface';
+import { first } from 'lodash';
+import { LoginFacade } from '../facades/login.facade';
 
 interface PlaylistItemResponse extends SpotifyObjectApiResponse {
   tracks: {
@@ -54,41 +57,53 @@ interface GetPlaylistResponse extends SpotifyObjectApiResponse {
   providedIn: 'root',
 })
 export class PlaylistsService {
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+    private loginFacade: LoginFacade
+  ) {}
 
   getUserPlaylists(
     limit: number,
     offset: number
   ): Observable<{ availablePlaylists: Playlist[]; count: number }> {
-    const token = this.authService.getToken();
-    let headers = new HttpHeaders();
-    headers = headers.set('Authorization', `Bearer ${token}`);
-    const url = `/v1/me/playlists?limit=${limit}&offset=${offset}`;
-    return this.http.get<GetUserPlaylistsResponse>(url, { headers }).pipe(
-      map((response) => {
-        const count = response.total;
-        const availablePlaylists = response.items.map(
-          (playlistItem) =>
-            ({
-              name: playlistItem.name,
-              id: playlistItem.id,
-              uri: playlistItem.uri,
-              type: playlistItem.type,
-              public: playlistItem.public,
-              description: playlistItem.description,
-              owner: {
-                id: playlistItem.owner.id,
-                displayName: playlistItem.owner.displayName,
-              } as PlaylistOwner,
-              tracks: {
-                href: playlistItem.tracks.href,
-                total: playlistItem.tracks.total,
-              },
-              imageUrl: first(playlistItem.images)?.url,
-            } as Playlist)
-        );
+    return this.authService.retrieveToken().pipe(
+      switchMap(({ accessToken, isTokenExpired }) => {
+        if (isTokenExpired) {
+          this.loginFacade.setIsLoggedIn(false);
+          return of({ availablePlaylists: [], count: 0 });
+        }
 
-        return { availablePlaylists, count };
+        let headers = new HttpHeaders();
+        headers = headers.set('Authorization', `Bearer ${accessToken}`);
+        const url = `/v1/me/playlists?limit=${limit}&offset=${offset}`;
+        return this.http.get<GetUserPlaylistsResponse>(url, { headers }).pipe(
+          map((response) => {
+            const count = response.total;
+            const availablePlaylists = response.items.map(
+              (playlistItem) =>
+                ({
+                  name: playlistItem.name,
+                  id: playlistItem.id,
+                  uri: playlistItem.uri,
+                  type: playlistItem.type,
+                  public: playlistItem.public,
+                  description: playlistItem.description,
+                  owner: {
+                    id: playlistItem.owner.id,
+                    displayName: playlistItem.owner.displayName,
+                  } as PlaylistOwner,
+                  tracks: {
+                    href: playlistItem.tracks.href,
+                    total: playlistItem.tracks.total,
+                  },
+                  imageUrl: first(playlistItem.images)?.url,
+                } as Playlist)
+            );
+
+            return { availablePlaylists, count };
+          })
+        );
       })
     );
   }
@@ -96,18 +111,26 @@ export class PlaylistsService {
   public getPlaylistTracksByPlaylistId(
     playlistId: string
   ): Observable<{ playlistTracks: Track[]; count: number }> {
-    const token = this.authService.getToken();
-    let headers = new HttpHeaders();
-    headers = headers.set('Authorization', `Bearer ${token}`);
-    const url = `/v1/playlists/${playlistId}`;
-    return this.http.get<GetPlaylistResponse>(url, { headers }).pipe(
-      map((response) => {
-        const count = response.tracks.total;
-        const playlistTracks = response.tracks.items.map((trackItem) =>
-          mapTrackApiResponsesToTrack(trackItem.track)
-        );
+    return this.authService.retrieveToken().pipe(
+      switchMap(({ accessToken, isTokenExpired }) => {
+        if (isTokenExpired) {
+          this.loginFacade.setIsLoggedIn(false);
+          return of({ playlistTracks: [], count: 0 });
+        }
 
-        return { playlistTracks, count };
+        let headers = new HttpHeaders();
+        headers = headers.set('Authorization', `Bearer ${accessToken}`);
+        const url = `/v1/playlists/${playlistId}`;
+        return this.http.get<GetPlaylistResponse>(url, { headers }).pipe(
+          map((response) => {
+            const count = response.tracks.total;
+            const playlistTracks = response.tracks.items.map((trackItem) =>
+              mapTrackApiResponsesToTrack(trackItem.track)
+            );
+
+            return { playlistTracks, count };
+          })
+        );
       })
     );
   }
@@ -116,18 +139,64 @@ export class PlaylistsService {
     playlistId: string,
     trackUris: string[]
   ): Observable<{ snapshotId: string }> {
-    const token = this.authService.getToken();
-    let headers = new HttpHeaders();
-    headers = headers.set('Authorization', `Bearer ${token}`);
-    const url = `/v1/playlists/${playlistId}`;
-    return this.http
-      .post<{ snapshot_id: string }>(url, { uris: trackUris }, { headers })
-      .pipe(
-        map((response) => {
-          const snapshotId = response.snapshot_id;
+    return this.authService.retrieveToken().pipe(
+      switchMap(({ accessToken, isTokenExpired }) => {
+        if (isTokenExpired) {
+          this.loginFacade.setIsLoggedIn(false);
+          return of({ snapshotId: '' });
+        }
 
-          return { snapshotId };
-        })
-      );
+        let headers = new HttpHeaders();
+        headers = headers.set('Authorization', `Bearer ${accessToken}`);
+        const url = `/v1/playlists/${playlistId}/tracks`;
+        return this.http
+          .post<{ snapshot_id: string }>(url, { uris: trackUris }, { headers })
+          .pipe(
+            map((response) => {
+              const snapshotId = response.snapshot_id;
+
+              return { snapshotId };
+            })
+          );
+      })
+    );
+  }
+
+  public removeTracksFromPlaylist(
+    playlistId: string,
+    trackUris: string[]
+  ): Observable<{ snapshotId: string }> {
+    return this.authService.retrieveToken().pipe(
+      switchMap(({ accessToken, isTokenExpired }) => {
+        if (isTokenExpired) {
+          this.loginFacade.setIsLoggedIn(false);
+          return of({ snapshotId: '' });
+        }
+
+        let headers = new HttpHeaders();
+        // headers: new HttpHeaders({
+        //   'Content-Type': 'application/json',
+        // }),
+        // const body = JSON.stringify({
+        //   tracks: trackUris.map(uri => ({ ['"uri"']: uri }))
+        // })
+        headers = headers.set('Authorization', `Bearer ${accessToken}`);
+        const options = {
+          headers,
+          body: {
+            tracks: trackUris.map((uri) => ({ ['"uri"']: uri })),
+          },
+        };
+
+        const url = `/v1/playlists/${playlistId}/tracks`;
+        return this.http.delete<{ snapshot_id: string }>(url, options).pipe(
+          map((response) => {
+            const snapshotId = response.snapshot_id;
+
+            return { snapshotId };
+          })
+        );
+      })
+    );
   }
 }
