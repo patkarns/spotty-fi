@@ -1,6 +1,8 @@
 const express = require('express')
 const request = require('request');
 const dotenv = require('dotenv');
+const nodeCron = require('node-cron');
+const moment = require('moment');
 
 const port = 5000
 
@@ -8,22 +10,22 @@ global.access_token = ''
 
 dotenv.config()
 
-var spotify_client_id = process.env.SPOTIFY_CLIENT_ID
-var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET
+let spotify_client_id = process.env.SPOTIFY_CLIENT_ID
+let spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET
 
-var spotify_redirect_uri = 'http://localhost:4200/auth/callback'
+let spotify_redirect_uri = 'http://localhost:4200/auth/callback'
 
-var generateRandomString = function (length) {
-  var text = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+let generateRandomString = function (length) {
+  let text = '';
+  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
 };
 
-var app = express();
+let app = express();
 
 const scopeArr = [
   'streaming user-read-email',
@@ -35,14 +37,16 @@ const scopeArr = [
   'playlist-read-private',
   'playlist-modify-public',
   'playlist-modify-private'
-]
+];
+
+let token_expiry_utc = new Date();
 
 app.get('/auth/login', (req, res) => {
-  var scope = scopeArr.join(', ');
-  var state = generateRandomString(16);
+  let scope = scopeArr.join(', ');
+  let state = generateRandomString(16);
 
-  var auth_query_parameters = new URLSearchParams({
-    response_type: "code",
+  let auth_query_parameters = new URLSearchParams({
+    response_type: 'code',
     client_id: spotify_client_id,
     scope: scope,
     redirect_uri: spotify_redirect_uri,
@@ -54,9 +58,9 @@ app.get('/auth/login', (req, res) => {
 
 
 app.get('/auth/callback', (req, res) => {
-  var code = req.query.code;
+  let code = req.query.code;
 
-  var authOptions = {
+  let authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     form: {
       code: code,
@@ -72,15 +76,16 @@ app.get('/auth/callback', (req, res) => {
 
   request.post(authOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
+      token_expiry_utc = moment(new Date()).add(body.expires_in - 60*2, 's').toDate();
+      console.log('token expires in', body.expires_in, token_expiry_utc);
       access_token = body.access_token;
       res.redirect('//localhost:4200/')
     }
   });
-
-})
+});
 
 app.get('/auth/token', (req, res) => {
-  res.json({ access_token: access_token})
+  res.json({ access_token, token_expiry_utc })
 })
 
 app.listen(port, () => {
@@ -88,7 +93,5 @@ app.listen(port, () => {
 })
 
 app.get('/', (req, res) => {
-  res.send("hello")
-
-
+  res.send("Home")
 });
