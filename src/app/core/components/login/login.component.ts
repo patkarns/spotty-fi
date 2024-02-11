@@ -11,5 +11,6 @@ import { LoginFacade } from '../../facades/login.facade';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  constructor(public loginFacade: LoginFacade) {}
+  constructor(public loginFacade: LoginFacade) {
+  }
 }
