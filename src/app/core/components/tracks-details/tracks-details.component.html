@@ -1,0 +1,36 @@
+<div class="track-details-container">
+    <ng-container *ngIf="tracksFacade.tracks$ | async as tracks">
+        <mat-grid-list cols="5" rowHeight="2:1" *ngIf="
+          !(tracksFacade.isLoading$ | async) || (tracksFacade.isLoaded$ | async);
+          else tracksLoadingSpinner
+        ">
+            <ng-container *ngIf="playlistsFacade.selectedTracksById$ | async as selectedTracksById">
+                <mat-grid-tile class="track-tile" (mouseenter)="trackInfo = track" (mouseleave)="trackInfo = null" matRipple
+                    colspan="1" *ngFor="let track of tracks" (click)="
+              isAddingToPlaylist
+                ? handleAddTrackToPlaylist(track)
+                : playbackFacade.addToPlaybackQueue(track.uri)
+            ">
+                    <img *ngIf="track.imageUrl" mat-card-image src="{{ track.imageUrl }}" matRipple
+                        [matRippleCentered]="false" [matRippleDisabled]="false" [matRippleUnbounded]="false" />
+                    <div *ngIf="trackInfo && !selectedTracksById[track.id]" class="track-info-overlay track-overlay">
+                        <div *ngIf="trackInfo" class="track-info-wrapper">
+                            <p class="text main-text">{{ trackInfo!.name }}</p>
+                            <p class="text subtitle-text">{{ trackInfo!.artists[0].name }}</p>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedTracksById[track.id]" class="track-add-to-playlist-overlay track-overlay">
+                        <div class="track-info-wrapper">
+                            <div class="text centered-icon">
+                                <mat-icon>playlist_add_check</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+            </ng-container>
+        </mat-grid-list>
+    </ng-container>
+    <ng-template #tracksLoadingSpinner>
+        <mat-spinner color="warn"></mat-spinner>
+    </ng-template>
+</div>

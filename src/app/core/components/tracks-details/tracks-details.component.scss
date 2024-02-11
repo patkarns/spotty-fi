@@ -1,0 +1,56 @@
+@import "../../../../variables.scss";
+
+.track-details-container {
+    .track-tile:hover {
+      cursor: pointer;
+  
+      .track-info-overlay {
+        opacity: 1;
+      }
+  
+      img {
+          opacity: 0.2;
+      }
+    }
+  
+    .track-overlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+      transition: 0.5s ease; 
+  
+      &.track-info-overlay {
+        opacity: 0;
+      }
+    
+      &.track-add-to-playlist-overlay {
+        opacity: .6;
+        background-color: $color-grey-primary;
+      }
+  
+      .track-info-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        flex-direction: column;
+  
+        
+  
+        
+      }
+    }
+    mat-spinner {
+      margin: 5em auto;
+    }
+  
+    .add-to-playlist-toggle-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }

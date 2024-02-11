@@ -4,12 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatRippleModule } from '@angular/material/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSliderModule } from '@angular/material/slider';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -20,7 +17,7 @@ import {
   keys,
   countBy,
   last,
-  mean
+  mean,
 } from 'lodash';
 import {
   combineLatest,
@@ -31,11 +28,11 @@ import {
 } from 'rxjs';
 
 import { TracksFacade } from '../../facades/tracks.facade';
-import { Track } from '../../state/tracks';
 import { GenreFacade } from '../../facades/genre.facade';
 import { PlaybackFacade } from '../../facades/playback.facade';
 import { PlaylistsFacade } from '../../facades/playlists.facade';
 import { PlaylistsComponent } from '../playlists/playlists.component';
+import { TracksDetailsComponent } from '../tracks-details/tracks-details.component';
 
 @Component({
   selector: 'app-tracks-display',
@@ -49,12 +46,10 @@ import { PlaylistsComponent } from '../playlists/playlists.component';
     MatIconModule,
     MatRippleModule,
     MatSliderModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatProgressSpinnerModule,
     MatExpansionModule,
     BrowserAnimationsModule,
-    PlaylistsComponent
+    PlaylistsComponent,
+    TracksDetailsComponent
   ],
   templateUrl: './tracks-display.component.html',
   styleUrl: './tracks-display.component.scss',
@@ -67,11 +62,13 @@ export class TracksDisplayComponent implements OnInit {
     greenLight: '#d7ebba',
     green: '#c6e29c'
   };
-  public trackInfo: Track | null = null;
   public selectedGenre: string | null = null;
-  public searchQuery: string = '';
   public popularGenresItems$: Observable<{ name: string; color: string }[]> =
     of([]);
+  public panelExpandedState: { [key: string]: boolean } = {
+    myPlaylists: false,
+    browseTracks: false
+  }
 
   constructor(
     public playbackFacade: PlaybackFacade,
@@ -81,7 +78,6 @@ export class TracksDisplayComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.tracksFacade.tracks$.subscribe(t => console.log('tracks', t))
     this.popularGenresItems$ = combineLatest([
       this.tracksFacade.artistsById$,
       this.tracksFacade.pageCount$,
@@ -115,7 +111,12 @@ export class TracksDisplayComponent implements OnInit {
   }
 
   public handleGenreToggle(genreName: string) {
+    // different behaviors based on whether the chip is selected/unselected
     this.selectedGenre = (this.selectedGenre === genreName) ? null : genreName;
     if (this.selectedGenre) this.tracksFacade.searchTracksByGenre(this.selectedGenre);
+  }
+
+  public confirmAddTracksToPlaylist() {
+    this.playlistsFacade.addTracksToPlaylist();
   }
 }

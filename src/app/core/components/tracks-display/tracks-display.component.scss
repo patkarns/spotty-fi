@@ -12,63 +12,27 @@
   .track-info {
     width: 90%;
   }
-}
 
-.track-container {
-  margin: 0 1em;
-
-  .track-tile:hover {
-    cursor: pointer;
-
-    .track-info-overlay {
-      opacity: 1;
+  .text {
+    color: $color-grey-darkest;
+    padding: 0 1em;
+    font-size: 1.2em;
+    margin: 0;
+    text-align: center;
+  
+    &.main-text {
+      font-weight: 500;
+      margin-bottom: 0.5em;
     }
-
-    img {
-        opacity: 0.2;
+  
+    &.subtitle-text {
+      font-weight: 300;
     }
-  }
-
-  .track-info-overlay {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    transition: 0.5s ease;
-
-    .track-info-wrapper {
-      margin: 1em 0;
-
-      .text {
-        color: $color-grey-darkest;
-        padding: 0 1em;
-        font-size: 1.2em;
-        margin: 0;
-        text-align: left;
-      }
-
-      .main-text {
-        font-weight: 500;
-        margin-bottom: 0.5em;
-      }
-
-      .subtitle-text {
-        font-weight: 300;
-      }
+  
+    &.centered-icon {
+      scale: (2);
     }
-  }
-
-  mat-spinner {
-    margin: 0 auto;
   }
 }
 
-:ng-deep .mat-grid-tile-content {
-  justify-content: flex-start !important ;
-  align-items: flex-start !important;
-}
 
