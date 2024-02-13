@@ -1,6 +1,7 @@
 # SpottyFi
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.2.
+![image](https://github.com/patkarns/spotty-fi/assets/30379111/d871bd29-a421-4ae8-b02d-f012906aaf61)
+
 
 ## Development server
 
