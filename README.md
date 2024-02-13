@@ -4,5 +4,5 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
-Run `npm run dev` for a dev server. Navigate to `http://localhost:4200/` (server running at http://localhost:5000/).
+Run `npm run dev` for a dev server. Navigate to `http://localhost:4200/` (server running at `http://localhost:5000/`).
 
