@@ -37,11 +37,24 @@
         align-items: center;
         justify-content: center;
         height: 100%;
-        flex-direction: column;
-  
+        flex-direction: column;    
         
-  
-        
+        .text {
+            color: $color-grey-darkest;
+            padding: 0 1em;
+            font-size: 1.2em;
+            margin: 0;
+            text-align: center;
+          
+            &.main-text {
+              font-weight: 500;
+              margin-bottom: 0.5em;
+            }
+          
+            &.subtitle-text {
+              font-weight: 300;
+            }
+          }
       }
     }
     mat-spinner {
